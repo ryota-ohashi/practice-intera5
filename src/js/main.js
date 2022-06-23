@@ -4,8 +4,8 @@ import p5 from "p5";
 const sketch = (p5) => {
   let img;
   // let drawingTime = 1;
-  let time = 0;
-  let length = 50;
+  // let time = 0;
+  // let length = 50;
   let draw = [];
   let mouseOver = false;
   let isDrawing = false;
@@ -35,43 +35,54 @@ const sketch = (p5) => {
   };
 
   p5.draw = () => {
-    time += 1;
-    if (mouseOver || isDrawing) {
-      // 適当に間引く
-      // if(time % 5 !== 0) return;
-      // マウスの位置の色を取得
-      const color = p5.get(mouse.x, mouse.y);
-      const r = color[0];
-      const g = color[1];
-      const b = color[2];
+    // マウスの位置の色を取得
+    const color = p5.get(mouse.x, mouse.y);
+    const r = color[0];
+    const g = color[1];
+    const b = color[2];
 
-      // 黒系の色だったら描画しない
-      if (r < 20 && g < 20 && b < 20) return;
-
-      // 線を引く
-      // length = p5.random(30, 300);
-      length = 1000;
-      draw.push([mouse.x, mouse.y, r, g, b, mouse.y + length]);
-      draw.forEach((d) => {
-        p5.stroke(d[2], d[3], d[4]);
-        p5.line(d[0], d[1], d[0] + d[5] * p5.cos(p5.radians(p5.frameCount)), d[1] + d[5] * p5.sin(p5.radians(p5.frameCount)));
-        // if (d[2] !== d[5]) {
-        //   drawLine(p5, d[0], d[1], d[2], d[3], d[4], 1);
-        //   d[2] += 1;
-        // }
-      });
-      // drawLine(p5, mouse.x, mouse.y, r, g, b, length);
+    // 極端な黒白系の色は追加しない
+    if (judgeColor(r, g, b)){
+      // 長さの決定
+      length = p5.random(50, 500);
+      // 追加
+      draw.push(
+        {
+          mouseX: mouse.x,
+          mouseY: mouse.y,
+          r: r,
+          g: g,
+          b: b,
+          length: mouse.y + length
+        }
+      );
     }
+
+    // 描画
+    draw.forEach((d) => {
+      if (d.mouseY < d.length) {
+        drawLine(p5, d.mouseX, d.mouseY, d.r, d.g, d.b, 5);
+        d.mouseY += 5;
+        if (d.r !== 255 && d.g !== 255 && d.b !== 255) {
+          d.r += 3;
+          d.g += 3;
+          d.b += 3;
+        }
+      }
+    });
   };
 
-  function drawLine(p5, x, y, r, g, b) {
-    p5.strokeWeight(1);
+  function drawLine(p5, x, y, r, g, b, length) {
+    p5.strokeWeight(3);
     p5.noFill();
     p5.stroke(r, g, b);
     p5.line(x, y, x, y + length);
-    p5.line(x + 4, y + 4, x + 4, y + length + 4);
-    p5.line(x - 4, y - 4, x - 4, y + length - 4);
   }
+  function judgeColor(r, g, b){
+    if(r < 20 && g < 20 && b < 20) return false;
+    if(r > 230 && b > 230 && g > 230) return false;
+    return true
+  };
 };
 
 new p5(sketch);
