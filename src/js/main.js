@@ -8,17 +8,18 @@ const sketch = (p5) => {
   let mouseOver = false;
   let isAnimating = false;
   let mouse = { x: 0, y: 0 };
+  const windowWidth = p5.windowWidth;
+  const windowHeight = p5.windowHeight;
+  const imgPath = "../img/img1.jpg";
+  const imgWidth = 500;
+  const imgHeight = 500;
   const minLength = 50;
   const maxLength = 500;
   const drawSpeed = 5;
   const rgbSpeed = 3;
-  const windowWidth = p5.windowWidth;
-  const windowHeight = p5.windowHeight;
-  const imgWidth = 500;
-  const imgHeight = 500;
 
   p5.preload = () => {
-    img = p5.loadImage("/img/img1.jpg");
+    img = p5.loadImage(imgPath);
   }
 
   p5.setup = () => {
