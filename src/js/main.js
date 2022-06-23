@@ -9,7 +9,7 @@ const sketch = (p5) => {
   let deleteIndex = [];
   let draw = [];
   let mouseOver = false;
-  let isDrawing = false;
+  let isAnimating = false;
   let mouse = { x: 0, y: 0 };
   let windowWidth = p5.windowWidth;
   let windowHeight = p5.windowHeight;
@@ -60,23 +60,33 @@ const sketch = (p5) => {
       }
     }
 
-    // 描画
-    draw.forEach((d, i) => {
-      if (d.mouseY < d.length) {
-        drawLine(p5, d.mouseX, d.mouseY, d.r, d.g, d.b, 5);
-        d.mouseY += 5;
-        if (d.r !== 255 && d.g !== 255 && d.b !== 255) {
-          d.r += 3;
-          d.g += 3;
-          d.b += 3;
+    // 描画要素があるかどうかを判定
+    if (draw.length > 0) {
+      isAnimating = true;
+    }else{
+      isAnimating = false;
+    }
+
+    if (isAnimating) {
+      // 描画
+      draw.forEach((d, i) => {
+        if (d.mouseY < d.length) {
+          drawLine(p5, d.mouseX, d.mouseY, d.r, d.g, d.b, 5);
+          d.mouseY += 5;
+          if (d.r !== 255 && d.g !== 255 && d.b !== 255) {
+            d.r += 3;
+            d.g += 3;
+            d.b += 3;
+          }
+        }else{
+          deleteIndex.push(i);
         }
-      }else{
-        deleteIndex.push(i);
-      }
-    });
-    // 描画が終わったものを削除
-    draw = draw.filter((d, index) => !deleteIndex.includes(index));
-    deleteIndex = [];
+      });
+      // 描画が終わったものを削除
+      draw = draw.filter((d, index) => !deleteIndex.includes(index));
+      deleteIndex = [];
+    }
+
   };
 
   function drawLine(p5, x, y, r, g, b, length) {
