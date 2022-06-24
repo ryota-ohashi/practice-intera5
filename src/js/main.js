@@ -1,5 +1,6 @@
 import "/scss/style.scss";
 import p5 from "p5";
+import imgPath from "../img/img1.jpg"
 
 const sketch = (p5) => {
   let img;
@@ -10,7 +11,6 @@ const sketch = (p5) => {
   let mouse = { x: 0, y: 0 };
   const windowWidth = p5.windowWidth;
   const windowHeight = p5.windowHeight;
-  const imgPath = "../img/img1.jpg";
   const imgWidth = 500;
   const imgHeight = 500;
   const minLength = 50;
